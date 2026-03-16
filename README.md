@@ -25,9 +25,32 @@ It wrote the code, ran away, and now the game is unplayable.
 
 ## 📝 Document Your Experience
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+**Game Purpose:**
+A number guessing game built with Streamlit where the player tries to guess a secret number within a limited number of attempts. The game supports three difficulty levels (Easy, Normal, Hard) with different number ranges and attempt limits.
+
+**Bugs Found:**
+
+1. **Wrong hints** : `check_guess` returned "Go HIGHER!" when the guess was too high and "Go LOWER!" when it was too low (swapped).
+2. **Intentional string comparison glitch** : On even-numbered attempts, `secret` was passed as a string, causing lexicographic comparison (e.g. `"9" > "42"` is `True`) instead of numeric comparison.
+3. **Hard mode easier than Normal** : Hard had range 1–50 while Normal had 1–100. Hard should be harder.
+4. **New Game ignored difficulty** : The "New Game" button always used `randint(1, 100)` regardless of selected difficulty.
+5. **Hardcoded info message** : The UI always said "Guess a number between 1 and 100" regardless of difficulty.
+6. **Attempts initialized to 1** : The attempts counter started at 1 before any guess was made, making "Attempts left" off by one from the start.
+7. **Invalid guess burned an attempt** : Typing "abc" and clicking Submit would decrement the attempt counter even though no valid guess was made.
+8. **New Game didn't reset status** : After winning, clicking "New Game" left `status = "won"`, so the game immediately blocked the player with `st.stop()`.
+9. **Double-click needed to submit** : Using `st.text_input` outside a form caused a focus-loss rerun before the button click registered.
+
+**Fixes Applied:**
+
+- Swapped the hint messages in `check_guess` to return the correct direction.
+- Removed the deliberate string conversion of `secret` in the submit block, making the `except TypeError` path unreachable.
+- Changed Hard difficulty range to 1–200.
+- Updated "New Game" to use `randint(low, high)` based on current difficulty.
+- Updated the info message to dynamically show `{low}` and `{high}`.
+- Changed attempts initialization from `1` to `0`.
+- Moved `attempts += 1` inside the `else` block so only valid guesses count.
+- Added `status = "playing"` and `history = []` reset to the New Game handler.
+- Wrapped `st.text_input` and Submit in an `st.form` to fix the double-click issue.
 
 ## 📸 Demo
 
