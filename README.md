@@ -54,7 +54,7 @@ A number guessing game built with Streamlit where the player tries to guess a se
 
 ## 📸 Demo
 
-- [ ] [Insert a screenshot of your fixed, winning game here]
+- [ ] [![alt text](<demos/winning_game.png>)]
 
 ## 🚀 Stretch Features
 
